@@ -12,25 +12,44 @@ Rectangle {
     id:page
     property int  score: 0
 
+    // Create database
     function dbInit() {
-      console.log("create base1");
-       var db = openDatabaseSync("
+        console.log("create base1");
+        var db = openDatabaseSync("save2.sdb", "1.0", "The Example QML SQL!", 1000000);
+        console.log("create base2");
+        db.transaction(
 
-.sdb", "1.0", "The Example QML SQL!", 1000000);
-         console.log("create base2");
-          db.transaction(
+                    function(tx) {
+                        // Create the database if it doesn't already exist
+                        tx.executeSql('CREATE TABLE IF NOT EXISTS [players] ([id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,'+
+                                      '[Name] VARCHAR(255)  NULL,'+
+                                      '[account] VARCHAR(255)  NULL)');
+                    }
+                    )
+    }
+   // input data on listview
+    Component {
+        id: petDelegate
+        Item {
+            id: wrapper
+            width: 200; height: 55
+            Column {
+                Text { text: 'Имя: ' + Name }
+                Text { text: 'Счет: ' + account }
+            }
+            // indent the item if it is the current item
+            states: State {
+                name: "Current"
+                when: wrapper.ListView.isCurrentItem
+                PropertyChanges { target: wrapper; x: 20 }
+            }
+            transitions: Transition {
+                NumberAnimation { properties: "x"; duration: 200;}
+            }
+        }
+    }
 
-                 function(tx) {
-// Create the database if it doesn't already exist
-                       tx.executeSql('CREATE TABLE IF NOT EXISTS [students] ([id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,'+
-                                    '[Name] VARCHAR(255)  NULL,'+
-                                     '[account] VARCHAR(255)  NULL)');
-
-// Add (another) greeting row
-                      // tx.executeSql("insert into students ('Name', 'account') values (  'Авдей', '107518');");
-                   }
-           )
- }
+    //name of the game in the main menu
     Text {
         id: text1
         x: 0
@@ -44,7 +63,7 @@ Rectangle {
         wrapMode: Text.WordWrap
         font.pixelSize: 52
     }
-
+// descriprion of the button "new game"
     Text {
         id: text2
         x: 0
@@ -56,6 +75,7 @@ Rectangle {
         font.family: "Comic Sans MS"
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 36
+
         MouseArea {
             id: mousearea1
             x: 0
@@ -65,13 +85,14 @@ Rectangle {
             anchors.leftMargin: 0
             anchors.topMargin: 0
             anchors.fill: parent
+            // after click the button "new game" display new window
             onClicked: {
                 page.state="State1"
             }
         }
 
     }
-
+// descriprion of the button "scores"
     Text {
         id: text3
         x: 0
@@ -86,7 +107,7 @@ Rectangle {
         font.pixelSize: 36
 
     }
-
+// descriprion of the button "about"
     Text {
         id: text4
         x: 0
@@ -99,7 +120,7 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 36
     }
-
+// descriprion of the button "exit"
     Text {
         id: text5
         x: 0
@@ -120,13 +141,14 @@ Rectangle {
             anchors.leftMargin: 0
             anchors.topMargin: 0
             anchors.fill: parent
+            //after click this button window close
             onClicked: {
                 Qt.quit();
                 // page.state="State2"
             }
         }
     }
-
+// description of the background image
     Image {
         id: image1
         x: 0
@@ -145,7 +167,7 @@ Rectangle {
         height: 200
         color: "#ffffff"
         opacity: 0
-
+//text "Scores:"
         Text {
             id: text6
             x: 249
@@ -156,7 +178,7 @@ Rectangle {
         }
 
     }
-
+//Text "Name"
     Text {
         id: text7
         x: 229
@@ -176,7 +198,7 @@ Rectangle {
         color: "#ffffff"
         opacity: 0
     }
-
+//input the name of the player for adding to database
     TextInput {
         focus: true
         id: text_input1
@@ -187,8 +209,10 @@ Rectangle {
         text: qsTr("text")
         font.pixelSize: 12
         opacity: 0
-    }
 
+
+    }
+// description of the button "save"
     Rectangle {
         id: rectangle3
         x: 52
@@ -200,36 +224,37 @@ Rectangle {
 
         Text {
             id: buttonLabel
-            text: "Save"
+            text: "save"
             font.pixelSize: 36
             anchors.centerIn: parent
             font.family: "Comic Sans MS"
             horizontalAlignment: Text.AlignHCenter
         }
+
+        // add to database new records
         MouseArea{
-               id: buttonMouseArea2
+            id: buttonMouseArea2
 
-               anchors.fill: parent //прикрепим все стороны области мыши к якорям прямоугольника
-                       //onClicked обработает корректные щелчки кнопки мыши
-               onClicked: {
-                   dbInit()
-                   var db = openDatabaseSync("save.sdb", "1.0", "The Example QML SQL!", 1000000);
-                     console.log("create base2");
-                      db.transaction(
+            anchors.fill: parent //прикрепим все стороны области мыши к якорям прямоугольника
+            //onClicked обработает корректные щелчки кнопки мыши
+            onClicked: {
+                //  buttonLabel.color = "red";
+                dbInit()
+                console.log(' text_input1textefsfswefe');
+                var db = openDatabaseSync("save2.sdb", "1.0", "The Example QML SQL!", 1000000);
+                console.log("create base2");
+                db.transaction(
 
-                             function(tx) {
-             ////
-
-
-                              tx.executeSql("insert into Students ( 'id','Name', 'account') values ('12',' text_input1.text', 'text1.text');");
-                              console.log(' text_input1.text');
-                              console.log('text1.text');
-                          }
-                          )
-               }
-           }
+                            function(tx) {
+                                tx.executeSql("insert into players ( 'Name', 'account') values ( '"+text_input1.text+"', '"+text8.text+"');"); //' text_input1.text', 'text1.text'
+                                console.log(' text_input1.text');
+                                console.log('text1.text');
+                            }
+                            )
+            }
+        }
     }
-
+    // description of the button "cancel"
     Rectangle {
         id: rectangle4
         x: 251
@@ -251,20 +276,21 @@ Rectangle {
             font.family: "Comic Sans MS"
             horizontalAlignment: Text.AlignHCenter
         }
+        //after clik  the button the current window close and go to main window
         MouseArea{
-               id: buttonMouseArea3
+            id: buttonMouseArea3
 
-               anchors.fill: parent //прикрепим все стороны области мыши к якорям прямоугольника
-                       //onClicked обработает корректные щелчки кнопки мыши
-               onClicked: {
-                    page.state="исходное состояние"
-               }
-           }
+            anchors.fill: parent
+            onClicked: {
+                page.state="исходное состояние"
+            }
+        }
     }
+    // increasing of the account with every step of the monster
     function getscore(a) {
-       if (a > page.score) page.score = a;
-       return page.score - 90;
-   }
+        if (a > page.score) page.score = a;
+        return page.score - 90;
+    }
     Rectangle {
         id: stats_block
         x: 70
@@ -274,7 +300,7 @@ Rectangle {
         color: "#222222"
         transformOrigin: Item.Center
         opacity: 0.860
-
+// description of the image with  the angry monster
         Text {
             id: name
             x: -73
@@ -286,6 +312,7 @@ Rectangle {
             z: 1
         }
 
+        // description of the text displayed scores
         Text {
             id: score
             x: page.width-100;
@@ -299,67 +326,73 @@ Rectangle {
             z: 1
         }
 
-
+// description of the image displayed the bottom layer of the ground
         Rectangle {
-          id: ground;
-          x:-67
-          y:page.height-65;
+            id: ground;
+            x:-67
+            y:page.height-65;
 
-          width: page.width; height: 80
-          color: "#00000000";
-          opacity: 1.0;
-          Image {
-              id: image3
-              x: -7
-              y: 36
-              source:randomImage();//"Stone-seamless-background.png";
-              width: 481
-              height: 65
-              anchors.rightMargin: 6
-              anchors.bottomMargin: -36
-              anchors.leftMargin: -7
-              anchors.topMargin: 36
-              fillMode: Image.Tile;
-              anchors.fill: parent
-              function randomImage()
-              {
-              var images = ["Stone-seamless-background.png", "Stone-seamless-background.png"];
-              var idx = Math.floor((Math.random() * 100)) % images.length;
-              return (images[idx]);
+            width: page.width; height: 80
+            color: "#00000000";
+            opacity: 1.0;
+            Image {
+                id: image3
+                x: -7
+                y: 36
+                source:randomImage();//"Stone-seamless-background.png";
+                width: 481
+                height: 65
+                anchors.rightMargin: 6
+                anchors.bottomMargin: -36
+                anchors.leftMargin: -7
+                anchors.topMargin: 36
+                fillMode: Image.Tile;
+                anchors.fill: parent
+               function randomImage()
+             {
+                  var images = ["Stone-seamless-background.png", "Stone-seamless-background.png"];
+                  var idx = Math.floor((Math.random() * 100)) % images.length;
+                  return (images[idx]);
               }
-          }
+            }
         }
-        Rectangle {
-          id: digger;
-          x: 456
-          y: 521
-          z: 2;
-          width: 50;
-          height:50;
-          color: "#00000000";
-          focus: true;
-          Keys.onLeftPressed:{ if (digger.pos.x != 0) digger.pos.x -= 5; console.log('111111');}
-          Keys.onRightPressed: if (digger.pos.x !== (page.width-digger.width)) digger.pos.x += 5;
-          Keys.onUpPressed: digger.pos.y -= 5;
-          Keys.onDownPressed: if (digger.pos.y !== (page.height-ground.height +20- digger.height)) digger.pos.y += 5;
-          onYChanged:{
-              score.text=getscore(page.height - digger.y-25);
-                console.log(getscore(page.height - digger.y));
-              console.log (digger.pos.y);
-          }
 
-          Image {
-              id: image2
-              x: 0
-              y: 1
-              fillMode: Image.Center;
-              rotation: 0;
-              transformOrigin: Item.Center;
-              visible: true;
-              source: "me-mini.png";
-          }
+        //description of the image with the main hero of the game
+        Rectangle {
+            id: digger;
+            x: 456
+            y: 521
+            z: 2;
+            width: 50;
+            height:50;
+            color: "#00000000";
+            focus: true;
+
+            // processing of the keybuttons realisated movement of the main hero
+            Keys.onLeftPressed:{ if (digger.pos.x != 0) digger.pos.x -= 5; console.log('111111');}
+            Keys.onRightPressed: if (digger.pos.x !== (page.width-digger.width)) digger.pos.x += 5;
+            Keys.onUpPressed: digger.pos.y -= 5;
+            Keys.onDownPressed: if (digger.pos.y !== (page.height-ground.height +20- digger.height)) digger.pos.y += 5;
+
+            // counting the scores while the main hero are moving
+            onYChanged:{
+                score.text=getscore(page.height - digger.y-25);
+                console.log(getscore(page.height - digger.y));
+                console.log (digger.pos.y);
+            }
+
+            Image {
+                id: image2
+                x: 0
+                y: 1
+                fillMode: Image.Center;
+                rotation: 0;
+                transformOrigin: Item.Center;
+                visible: true;
+                source: "me-mini.png";
+            }
         }
-//
+        // description og the image with the angry monter
         Rectangle {
             id:monster1;
             color:"#00000000";
@@ -373,6 +406,7 @@ Rectangle {
                 source: "Angry-monster1-l.png";
             }
 
+
             Rectangle {
                 id: rectangle5
                 x: -376
@@ -382,25 +416,27 @@ Rectangle {
                 color: "#ffffff"
                 opacity: 0
             }
+            //processing of the event of  the collision tne main hero and the angry monster
             onXChanged:{ if((digger.pos.x < monster1.pos.x+30) && (digger.pos.x > monster1.pos.x) && (digger.pos.y > monster1.pos.y-monster1.height) && (digger.pos.y < monster1.pos.y+70))
                 {digger.pos.y = page.height - 90;
-                     page.state="State2"
+                    //displaying the state 2
+                    page.state="State2"
                     text8.text=getscore(page.height - digger.y);
                     page.score = 0;
                     score.text = "0";
                     digger.pos.y =550;
                     digger.pos.x =285;
                 }
-//
+                //
             }
+// movement of the angry monster
+          SequentialAnimation on x {
 
-            SequentialAnimation on x {
-
-                loops: Animation.Infinite;
+               loops: Animation.Infinite;
                 NumberAnimation { to: 0; duration:3000; }
                 PropertyAction { target: monster1Image; property: "source"; value: "Angry-monster1-r.png"; }
                 NumberAnimation { to: page.width - 50; duration: 3000 }
-                PropertyAction { target: monster1Image; property: "source"; value: "Angry-monster1-l.png"; }
+               PropertyAction { target: monster1Image; property: "source"; value: "Angry-monster1-l.png"; }
             }
         }
     }
@@ -413,7 +449,7 @@ Rectangle {
         font.pixelSize: 12
         opacity: 0
     }
-
+// procesing of the batton "scores"
     MouseArea {
         id: mouse_area1
         x: 0
@@ -422,29 +458,29 @@ Rectangle {
         height: 51
         onClicked:
         {
-           page.state="State3"
-        }
-    }
-    Component {
-        id: petDelegate
-        Item {
-            id: wrapper
-            width: 200; height: 55
-            Column {
-                Text { text: 'Имя: ' + Name }
-                Text { text: 'Счет: ' + account }
+            var db = openDatabaseSync("save2.sdb", "1.0", "The Example QML SQL!", 1000000);
+
+            db.transaction(
+                        function(tx) {
+
+                            // Show all added records
+                            var rs = tx.executeSql('SELECT * FROM players');
+                            for(var i = 0; i < rs.rows.length; i++) {
+                                var data = {'Name':rs.rows.item(i).Name, 'account': rs.rows.item(i).account};
+                                listModel.append(data)
+
                             }
-            // indent the item if it is the current item
-            states: State {
-                name: "Current"
-                when: wrapper.ListView.isCurrentItem
-                PropertyChanges { target: wrapper; x: 20 }
-            }
-            transitions: Transition {
-                NumberAnimation { properties: "x"; duration: 200;}
-            }
+                            listModel.sync()
+                        }
+                        )
+            page.state="State3"
+
+
+
+
         }
     }
+
 
     // Define a highlight with customised movement between items.
 
@@ -458,21 +494,21 @@ Rectangle {
             id: listModel
         }
         delegate: petDelegate
-        focus: true
+        //focus: true
 
         // Set the highlight delegate. Note we must also set highlightFollowsCurrentItem
         // to false so the highlight delegate can control how the highlight is moved.
-        highlight: highlightBar
-        highlightFollowsCurrentItem: false
+        //highlight: highlightBar
+        // highlightFollowsCurrentItem: false
 
         Component.onCompleted: {
-            var db = openDatabaseSync("save.sdb", "1.0", "The Example QML SQL!", 1000000);
+            var db = openDatabaseSync("save2.sdb", "1.0", "The Example QML SQL!", 1000000);
 
             db.transaction(
                         function(tx) {
 
                             // Show all added greetings
-                            var rs = tx.executeSql('SELECT * FROM students');
+                            var rs = tx.executeSql('SELECT * FROM players');
                             for(var i = 0; i < rs.rows.length; i++) {
                                 var data = {'Name':rs.rows.item(i).Name, 'account': rs.rows.item(i).account};
                                 listModel.append(data)
@@ -490,7 +526,7 @@ Rectangle {
         State {
             name: "State1"
 
-           PropertyChanges {
+            PropertyChanges {
                 target: rectangle1
                 x: -171
                 y: -5
@@ -533,17 +569,17 @@ Rectangle {
                 visible: true
             }
 
-//            PropertyChanges {
-//                target: image3
-//                x: 0
-//                y: 0
-//                width: 480
-//                height: 80
-//                anchors.topMargin: 0
-//                anchors.rightMargin: 0
-//                anchors.bottomMargin: 0
-//                anchors.leftMargin: 0
-//            }
+            //            PropertyChanges {
+            //                target: image3
+            //                x: 0
+            //                y: 0
+            //                width: 480
+            //                height: 80
+            //                anchors.topMargin: 0
+            //                anchors.rightMargin: 0
+            //                anchors.bottomMargin: 0
+            //                anchors.leftMargin: 0
+            //            }
 
 
             PropertyChanges {
@@ -587,11 +623,11 @@ Rectangle {
                 height: 80
             }
 
-//            PropertyChanges {
-//                target: ground
-//                x: 0
-//                height: 65
-//            }
+            //            PropertyChanges {
+            //                target: ground
+            //                x: 0
+            //                height: 65
+            //            }
 
         },
         State {
@@ -719,6 +755,7 @@ Rectangle {
             PropertyChanges {
                 target: ground
                 x: -53
+                visible: false
             }
 
             PropertyChanges {
@@ -736,19 +773,19 @@ Rectangle {
             PropertyChanges {
                 target: buttonMouseArea2
                 x: 0
-                y: -6
+                y: -3
                 width: 220
                 height: 96
-                anchors.topMargin: -6
+                anchors.topMargin: -3
                 anchors.rightMargin: 0
-                anchors.bottomMargin: 0
+                anchors.bottomMargin: -2
                 anchors.leftMargin: 0
             }
 
             PropertyChanges {
                 target: rectangle5
-                x: 94
-                y: 168
+                x: 76
+                y: -398
                 width: 293
                 height: 61
                 color: "#a08787"
@@ -775,6 +812,13 @@ Rectangle {
                 verticalAlignment: "AlignVCenter"
                 horizontalAlignment: "AlignHCenter"
                 opacity: 1
+            }
+
+            PropertyChanges {
+                target: image2
+                x: -111
+                y: 287
+                visible: true
             }
         },
         State {
@@ -848,6 +892,18 @@ Rectangle {
             PropertyChanges {
                 target: page
                 color: "#3a2b24"
+            }
+
+            PropertyChanges {
+                target: image2
+                x: -126
+                y: 227
+            }
+
+            PropertyChanges {
+                target: digger
+                x: 380
+                y: 758
             }
         }
     ]
