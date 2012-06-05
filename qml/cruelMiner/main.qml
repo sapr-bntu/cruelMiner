@@ -4,6 +4,8 @@ import QtQuick 1.1
 // import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 import QtQuick 1.1
 import Qt 4.7
+import "parts"
+
 
 Rectangle {
     width: 480
@@ -159,25 +161,14 @@ Rectangle {
         opacity: 0
     }
 
-    Rectangle {
-        id: rectangle1
-        x: 123
-        y: 562
-        width: 200
-        height: 200
-        color: "#ffffff"
-        opacity: 0
-//text "Scores:"
-        Text {
-            id: text6
-            x: 249
-            y: 874
-            text: qsTr("text")
-            font.pixelSize: 12
-            opacity: 0
-        }
+Rectangless {
+    id:rectangle1
+    x: 123
+    y: 120
+    text:"Scores:"
+}
 
-    }
+
 //Text "Name"
     Text {
         id: text7
@@ -212,24 +203,10 @@ Rectangle {
 
 
     }
-// description of the button "save"
-    Rectangle {
-        id: rectangle3
-        x: 52
-        y: 1241
-        width: 200
-        height: 200
-        color: "#ffffff"
-        opacity: 0
-
-        Text {
-            id: buttonLabel
-            text: "save"
-            font.pixelSize: 36
-            anchors.centerIn: parent
-            font.family: "Comic Sans MS"
-            horizontalAlignment: Text.AlignHCenter
-        }
+    Rectangless {
+        id:rectangle3
+        x: 123
+        y: 500
 
         // add to database new records
         MouseArea{
@@ -255,27 +232,11 @@ Rectangle {
         }
     }
     // description of the button "cancel"
-    Rectangle {
+    Rectangless {
         id: rectangle4
         x: 251
         y: 545
-        width: 200
-        height: 200
-        color: "#ffffff"
-        opacity: 0
-
-        Text {
-            id: buttonLabel2
-            x: 15
-            y: 5
-            text: "Cancel"
-            font.pixelSize: 36
-            anchors.centerIn: parent
-            anchors.horizontalCenterOffset: 0
-            anchors.verticalCenterOffset: 3
-            font.family: "Comic Sans MS"
-            horizontalAlignment: Text.AlignHCenter
-        }
+        text: "Cancel"
         //after clik  the button the current window close and go to main window
         MouseArea{
             id: buttonMouseArea3
@@ -325,6 +286,8 @@ Rectangle {
             font.pointSize: 16
             z: 1
         }
+
+
 
 // description of the image displayed the bottom layer of the ground
         Rectangle {
@@ -569,18 +532,6 @@ Rectangle {
                 visible: true
             }
 
-            //            PropertyChanges {
-            //                target: image3
-            //                x: 0
-            //                y: 0
-            //                width: 480
-            //                height: 80
-            //                anchors.topMargin: 0
-            //                anchors.rightMargin: 0
-            //                anchors.bottomMargin: 0
-            //                anchors.leftMargin: 0
-            //            }
-
 
             PropertyChanges {
                 target: monster1Image
@@ -622,29 +573,22 @@ Rectangle {
                 width: 14
                 height: 80
             }
-
-            //            PropertyChanges {
-            //                target: ground
-            //                x: 0
-            //                height: 65
-            //            }
-
         },
         State {
             name: "State2"
             PropertyChanges {
                 target: rectangle1
                 x: 0
-                y: 0
+                y: 110
                 width: 480
-                height: 720
+                height: 0
                 color: "#3a2b24"
                 opacity: "1"
             }
 
             PropertyChanges {
                 target: image1
-                x: "0"
+                x: 0
                 y: 0
                 width: "480"
                 height: 720
@@ -655,7 +599,7 @@ Rectangle {
             PropertyChanges {
                 target: text6
                 x: 0
-                y: 76
+                y: 130
                 width: 480
                 height: 68
                 color: "#ffffff"
@@ -819,6 +763,17 @@ Rectangle {
                 x: -111
                 y: 287
                 visible: true
+            }
+
+            PropertyChanges {
+                target: mouse_area1
+                x: 1
+                y: 323
+            }
+
+            PropertyChanges {
+                target: score
+                y: 25
             }
         },
         State {
