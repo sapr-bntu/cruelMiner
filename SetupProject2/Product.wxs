@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="5fa9752b-efbf-4b89-a798-dd78afe1f3c5" Name="SetupProject2" Language="1033" Version="1.0.0.0" Manufacturer="SetupProject2" UpgradeCode="c3d99526-68d0-4908-b0ce-cc0153b07f84">
+		<Package InstallerVersion="200" Compressed="yes" />
+
+		<Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLLOCATION" Name="Reminder">
+          <Component Id="ProductComponent" Guid="8D88B068-766F-4DDD-BA06-FC8BC616C43E">
+            <File Id="BazaDannich" Source="$(var.SolutionDir)\SetupProject2\BazaDannich.exe"/>
+            <File Id="QtCore" Source="$(var.SolutionDir)\SetupProject2\QtCore4.dll"/>
+            <File Id="QtGui" Source="$(var.SolutionDir)\SetupProject2\QtGui4.dll"/>
+            <File Id="QtSql" Source="$(var.SolutionDir)\SetupProject2\QtSql4.dll"/>
+					</Component>
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<Feature Id="ProductFeature" Title="SetupProject2" Level="1">
+			<!-- TODO: Remove the comments around this ComponentRef element and the Component above in order to add resources to this installer. -->
+			<!-- <ComponentRef Id="ProductComponent" /> -->
+
+			<!-- Note: The following ComponentGroupRef is required to pull in generated authoring from project references. -->
+      <ComponentRef Id="ProductComponent" />
+		</Feature>
+	</Product>
+</Wix>

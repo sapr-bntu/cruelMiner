@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SetupProject2", "SetupProject2\SetupProject2.wixproj", "{ECBB4795-6204-4C8D-A105-F9D5034F0FDF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ECBB4795-6204-4C8D-A105-F9D5034F0FDF}.Debug|x86.ActiveCfg = Debug|x86
+		{ECBB4795-6204-4C8D-A105-F9D5034F0FDF}.Debug|x86.Build.0 = Debug|x86
+		{ECBB4795-6204-4C8D-A105-F9D5034F0FDF}.Release|x86.ActiveCfg = Release|x86
+		{ECBB4795-6204-4C8D-A105-F9D5034F0FDF}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
