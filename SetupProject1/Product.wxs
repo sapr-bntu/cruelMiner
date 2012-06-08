@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="6039687f-9446-4f8b-b678-18978112f139" Name="SetupProject1" Language="1033" Version="1.0.0.0" Manufacturer="SetupProject1" UpgradeCode="0294db1d-ac87-459c-b07f-bd2145f7a581">
+		<Package InstallerVersion="200" Compressed="yes" />
+
+		<Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLLOCATION" Name="SetupMiner">
+          <Component Id="ProductComponent" Guid="847deb0f-9332-4be0-87a9-7ad47c31940f">
+            <File Id="qtMiner" Source="$(var.SolutionDir)\SetupProject1\untitled.exe"/>
+            <File Id="QtCore" Source="$(var.SolutionDir)\SetupProject1\QtCore4.dll"/>
+            <File Id="QtGui" Source="$(var.SolutionDir)\SetupProject1\QtGui4.dll"/>
+            <File Id="QtDeclarative" Source="$(var.SolutionDir)\SetupProject1\QtDeclarative4.dll"/>
+            <File Id="QtXmlPatterns" Source="$(var.SolutionDir)\SetupProject1\QtXmlPatterns4.dll"/>
+            <File Id="QtSql" Source="$(var.SolutionDir)\SetupProject1\QtSql4.dll"/>
+            <File Id="QtNetwork" Source="$(var.SolutionDir)\SetupProject1\QtNetwork4.dll"/>
+            <File Id="QtScript" Source="$(var.SolutionDir)\SetupProject1\QtScript4.dll"/>
+            <!-- <File Id="next" Source="$(var.SolutionDir)\Qtplayer\Кн. перемотка вперёд.png"/>
+						<File Id="prev" Source="$(var.SolutionDir)\Qtplayer\Кн. перемотка назад.png"/>
+						<File Id="stop" Source="$(var.SolutionDir)\Qtplayer\Кн. СТОП.png"/>
+						<File Id="play" Source="$(var.SolutionDir)\Qtplayer\Кн.ПУСК.png"/>-->
+          </Component>
+          <Directory Id="INSTALLLOCATION1" Name="qml">
+            <Directory Id="INSTALLLOCATION2" Name="untitled">
+              <Component Id="ProductComponent1" Guid="F8641942-EC37-4830-83DB-D7F2F1CBB183">
+                <File Id="Angry_monster1_l" Source="$(var.SolutionDir)\SetupProject1\qml\untitled\Angry-monster1-l.png"/>
+                <File Id="Angry_monster1_r" Source="$(var.SolutionDir)\SetupProject1\qml\untitled\Angry-monster1-r.png"/>
+                <File Id="me_mini" Source="$(var.SolutionDir)\SetupProject1\qml\untitled\me-mini.png"/>
+                <File Id="Stone_seamless_background" Source="$(var.SolutionDir)\SetupProject1\qml\untitled\Stone-seamless-background.png"/>
+                <File Id="Stone_Wall_Seamless_Pattern" Source="$(var.SolutionDir)\SetupProject1\qml\untitled\Stone-Wall-Seamless-Pattern.jpg"/>
+                <File Id="main" Source="$(var.SolutionDir)\SetupProject1\qml\untitled\main.qml"/>                
+              </Component>
+              <Directory Id="INSTALLLOCATION3" Name="parts">
+                <Component Id="ProductComponent2" Guid="5620D67B-F0EA-44B9-A144-0577AC05E199">
+                <File Id="elements" Source="$(var.SolutionDir)\SetupProject1\qml\untitled\parts\elements.qml"/>
+                <File Id="qmldir" Source="$(var.SolutionDir)\SetupProject1\qml\untitled\parts\qmldir"/>
+                </Component>
+               </Directory>
+            </Directory> 
+          </Directory>
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<Feature Id="ProductFeature" Title="SetupProject1" Level="1">
+			<!-- TODO: Remove the comments around this ComponentRef element and the Component above in order to add resources to this installer. -->
+			<!-- <ComponentRef Id="ProductComponent" /> -->
+
+			<!-- Note: The following ComponentGroupRef is required to pull in generated authoring from project references. -->
+	
+      <ComponentRef Id="ProductComponent" />
+      <ComponentRef Id="ProductComponent1" />
+      <ComponentRef Id="ProductComponent2" />
+		</Feature>
+	</Product>
+</Wix>

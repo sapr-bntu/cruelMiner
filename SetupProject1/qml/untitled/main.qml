@@ -162,6 +162,7 @@ Rectangle {
     }
 
 Rectangless {
+   // color:red
     id:rectangle1
     x: 123
     y: 120
@@ -204,6 +205,7 @@ Rectangless {
 
     }
     Rectangless {
+       // color:red
         id:rectangle3
         x: 123
         y: 500
