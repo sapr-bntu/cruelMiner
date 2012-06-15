@@ -16,7 +16,7 @@ Rectangle {
 
     // Create database
     function dbInit() {
-        console.log("create base1");
+        //console.log("create base1");
         var db = openDatabaseSync("save2.sdb", "1.0", "The Example QML SQL!", 1000000);
         console.log("create base2");
         db.transaction(
@@ -53,13 +53,13 @@ Rectangle {
 
     //name of the game in the main menu
     Text {
-        id: text1
+        id: _AppTitle
         x: 0
         y: 29
         width: 480
         height: 72
         color: "#ffffff"
-        text: qsTr("Jumper")
+        text: qsTr("cruelMiner")
         horizontalAlignment: Text.AlignHCenter
         font.family: "Comic Sans MS"
         wrapMode: Text.WordWrap
@@ -67,7 +67,7 @@ Rectangle {
     }
 // descriprion of the button "new game"
     Text {
-        id: text2
+        id: _NewGame_menuItem
         x: 0
         y: 214
         width: 480
@@ -136,6 +136,7 @@ Rectangle {
         styleColor: "#ffffff"
         font.pixelSize: 36
         MouseArea {
+            id: mousearea3
             x: 0
             y: 0
             anchors.rightMargin: 0
@@ -146,7 +147,36 @@ Rectangle {
             //after click this button window close
             onClicked: {
                 Qt.quit();
-                // page.state="State2"
+
+            }
+        }
+    }
+    // back
+    Text {
+        id: back
+        x: 273
+        y: 646
+        width: 480
+        height: 51
+        color: "#ffffff"
+        text: qsTr("Back")
+        font.family: "Comic Sans MS"
+        horizontalAlignment: Text.AlignHCenter
+        styleColor: "#ffffff"
+        font.pixelSize: 36
+        MouseArea {
+            id: mousearea2
+            x: 0
+            y: 0
+            anchors.rightMargin: 0
+            anchors.bottomMargin: 0
+            anchors.leftMargin: 0
+            anchors.topMargin: 0
+            anchors.fill: parent
+            //after click this button window close
+            onClicked: {
+                page.state = "исходное состояние"
+
             }
         }
     }
@@ -217,17 +247,18 @@ Rectangless {
             onClicked: {
                 //  buttonLabel.color = "red";
                 dbInit()
-                console.log(' text_input1textefsfswefe');
+                //console.log(' text_input1textefsfswefe');
                 var db = openDatabaseSync("save2.sdb", "1.0", "The Example QML SQL!", 1000000);
-                console.log("create base2");
+                //console.log("create base2");
                 db.transaction(
 
                             function(tx) {
-                                tx.executeSql("insert into players ( 'Name', 'account') values ( '"+text_input1.text+"', '"+text8.text+"');"); //' text_input1.text', 'text1.text'
-                                console.log(' text_input1.text');
-                                console.log('text1.text');
+                                tx.executeSql("insert into players ( 'Name', 'account') values ( '"+text_input1.text+"', '"+text8.text+"');"); //' text_input1.text', '_AppTitle.text'
+                                //console.log(' text_input1.text');
+                                //console.log('_AppTitle.text');
                             }
                             )
+                page.state="исходное состояние";
             }
         }
     }
@@ -292,7 +323,7 @@ Rectangless {
 // description of the image displayed the bottom layer of the ground
         Rectangle {
             id: ground;
-            x:-67
+            x:-70
             y:page.height-65;
 
             width: page.width; height: 80
@@ -340,14 +371,19 @@ Rectangless {
             // counting the scores while the main hero are moving
             onYChanged:{
                 score.text=getscore(page.height - digger.y-25);
-                console.log(getscore(page.height - digger.y));
-                console.log (digger.pos.y);
+                //console.log(getscore(page.height - digger.y));
+                //console.log (digger.pos.y);
+                if(page.score >= 605) {
+                    text8.text=getscore(page.height - digger.y);
+                    page.state = "State2";
+                }
+
             }
 
             Image {
                 id: image2
-                x: 0
-                y: 1
+                x: -46
+                y: 229
                 fillMode: Image.Center;
                 rotation: 0;
                 transformOrigin: Item.Center;
@@ -361,11 +397,11 @@ Rectangless {
             color:"#00000000";
             width:50;height:50;
             x:page.width - monster1.width
-            y:page.height/2;
+            y:page.height/2 - 40;
             Image {
                 id: monster1Image;
-                x: -81
-                y: -173
+                x: -6
+                y: -321
                 source: "Angry-monster1-l.png";
             }
 
@@ -400,6 +436,98 @@ Rectangless {
                 PropertyAction { target: monster1Image; property: "source"; value: "Angry-monster1-r.png"; }
                 NumberAnimation { to: page.width - 50; duration: 3000 }
                PropertyAction { target: monster1Image; property: "source"; value: "Angry-monster1-l.png"; }
+            }
+        }
+        // second monster
+        Rectangle {
+            id:monster2;
+            color:"#00000000";
+            width:50;height:50;
+            x:page.width - monster2.width
+            y:page.height/2 + 120;
+            Image {
+                id: monster2Image;
+                x: -176
+                y: -35
+                source: "Angry-monster1-l.png";
+            }
+
+
+            Rectangle {
+                id: rectangle5_1
+                x: -376
+                y: -103
+                width: 200
+                height: 200
+                color: "#ffffff"
+                opacity: 0
+            }
+            //processing of the event of  the collision tne main hero and the angry monster
+            onXChanged:{ if((digger.pos.x < monster2.pos.x+30) && (digger.pos.x > monster2.pos.x) && (digger.pos.y > monster2.pos.y-monster2.height) && (digger.pos.y < monster2.pos.y+70))
+                {digger.pos.y = page.height - 90;
+                    //displaying the state 2
+                    page.state="State2"
+                    text8.text=getscore(page.height - digger.y);
+                    page.score = 0;
+                    score.text = "0";
+                    digger.pos.y =550;
+                    digger.pos.x =285;
+                }
+                //
+            }
+// movement of the angry monster
+          SequentialAnimation on x {
+               loops: Animation.Infinite;
+               NumberAnimation { to: 0; duration:3400; }
+               PropertyAction { target: monster2Image; property: "source"; value: "Angry-monster1-r.png"; }
+               NumberAnimation { to: page.width - 50; duration: 3400 }
+               PropertyAction { target: monster2Image; property: "source"; value: "Angry-monster1-l.png"; }
+            }
+        }
+        //third monster
+        Rectangle {
+            id:monster3;
+            color:"#00000000";
+            width:50;height:50;
+            x:-53
+            y:page.height/2 - 160
+            Image {
+                id: monster3Image;
+                x: 0
+                y: 0
+                source: "Angry-monster1-r.png";
+            }
+
+
+            Rectangle {
+                id: rectangle5_2
+                x: -376
+                y: -103
+                width: 200
+                height: 200
+                color: "#ffffff"
+                opacity: 0
+            }
+            //processing of the event of  the collision tne main hero and the angry monster
+            onXChanged:{ if((digger.pos.x < monster3.pos.x+30) && (digger.pos.x > monster3.pos.x) && (digger.pos.y > monster3.pos.y-monster3.height) && (digger.pos.y < monster3.pos.y+70))
+                {digger.pos.y = page.height - 90;
+                    //displaying the state 2
+                    page.state="State2"
+                    text8.text=getscore(page.height - digger.y);
+                    page.score = 0;
+                    score.text = "0";
+                    digger.pos.y =550;
+                    digger.pos.x =285;
+                }
+                //
+            }
+// movement of the angry monster
+          SequentialAnimation on x {
+               loops: Animation.Infinite;
+               NumberAnimation { to: page.width - 50; duration:3900; }
+               PropertyAction { target: monster3Image; property: "source"; value: "Angry-monster1-l.png"; }
+               NumberAnimation { to: 0; duration: 3900 }
+               PropertyAction { target: monster3Image; property: "source"; value: "Angry-monster1-r.png"; }
             }
         }
     }
@@ -543,10 +671,24 @@ Rectangless {
 
             PropertyChanges {
                 target: monster1
+                y: 200
+                width: 50
+                height: 83
+            }
+            PropertyChanges {
+                target: monster2Image
+                x: 0
+                y: 0
                 width: 50
                 height: 83
             }
 
+            PropertyChanges {
+                target: monster2
+                y: 420
+                width: 50
+                height: 83
+            }
             PropertyChanges {
                 target: digger
                 x: 207
@@ -572,6 +714,20 @@ Rectangless {
                 target: score
                 width: 14
                 height: 80
+            }
+
+            PropertyChanges {
+                target: monster3
+                x: 6
+                y: 310
+                width: 63
+                height: 85
+            }
+
+            PropertyChanges {
+                target: monster3Image
+                x: 0
+                y: 0
             }
         },
         State {
@@ -775,6 +931,12 @@ Rectangless {
                 target: score
                 y: 25
             }
+
+            PropertyChanges {
+                target: monster2Image
+                x: -84
+                y: 152
+            }
         },
         State {
             name: "State3"
@@ -790,7 +952,7 @@ Rectangless {
             }
 
             PropertyChanges {
-                target: text2
+                target: _NewGame_menuItem
                 x: 524
                 y: 189
             }
@@ -859,6 +1021,52 @@ Rectangless {
                 target: digger
                 x: 380
                 y: 758
+            }
+
+            PropertyChanges {
+                target: monster2Image
+                x: -120
+                y: 161
+            }
+
+            PropertyChanges {
+                target: back
+                x: 348
+                y: 520
+                width: 91
+                height: 51
+            }
+
+            PropertyChanges {
+                target: mousearea2
+                x: 225
+                y: 0
+                width: 78
+                height: 51
+                anchors.bottomMargin: 0
+                anchors.topMargin: 0
+                anchors.leftMargin: 225
+                anchors.rightMargin: 177
+            }
+
+            PropertyChanges {
+                target: mousearea3
+                x: 231
+                y: 0
+                width: 70
+                height: 51
+                anchors.bottomMargin: 0
+                anchors.topMargin: 0
+                anchors.leftMargin: 231
+                anchors.rightMargin: 179
+            }
+
+            PropertyChanges {
+                target: text5
+                x: -11
+                y: 520
+                width: 197
+                height: 51
             }
         }
     ]
